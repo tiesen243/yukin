@@ -11,7 +11,7 @@ interface Prams {
 }
 
 export const seo = (params: Prams): Metadata => {
-  const title = params.title ? `${params.title} | Create Yuki App` : 'Create Yuki App'
+  const title = params.title ? `${params.title} | Yukin` : 'Yukin'
   const description =
     params.description ?? 'A Next.js template with TypeScript, Tailwind CSS, ESLint and Prettier'
   const images = params.images ?? ['/api/og']

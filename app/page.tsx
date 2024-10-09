@@ -1,45 +1,60 @@
+'use client'
+
 import type { NextPage } from 'next'
 import Image from 'next/image'
-import { Github } from 'lucide-react'
+import Link from 'next/link'
 
-import { Button } from '@/components/ui/button'
-import { Typography } from '@/components/ui/typography'
+import { Pagination } from '@/components/pagination'
+import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Skeleton } from '@/components/ui/skeleton'
+import { useMangas } from '@/lib/api/manga'
 
-const Page: NextPage = () => (
-  <main className="container flex min-h-dvh max-w-screen-lg flex-col items-center justify-center overflow-x-hidden">
-    <div className="pointer-events-none relative flex place-items-center before:absolute before:h-[700px] before:w-[140px] before:translate-x-1 before:translate-y-[-10px] before:rotate-[-32deg] before:rounded-full before:bg-gradient-to-r before:from-[#AB1D1C] before:to-[#E18317] before:opacity-30 before:blur-[100px] before:content-[''] lg:before:h-[700px] lg:before:w-[240px] lg:before:translate-x-[-100px]" />
+interface Props {
+  searchParams: {
+    page?: string
+  }
+}
 
-    <Image src="https://tiesen.id.vn/assets/tiesen.png" width={2500} height={400} alt="tiesen" />
+const Page: NextPage<Props> = ({ searchParams = { page: 1 } }) => {
+  const { data, isLoading } = useMangas({ page: Number(searchParams.page ?? 1) })
 
-    <Typography level="h1" className="text-center brightness-150">
-      A Next.js template with{' '}
-      <span className="bg-[linear-gradient(135deg,#3178C6,69%,hsl(var(--background)))] bg-clip-text text-transparent">
-        TypeScript
-      </span>
-      ,{' '}
-      <span className="bg-[linear-gradient(135deg,#06B6D4,69%,hsl(var(--background)))] bg-clip-text text-transparent">
-        Tailwind CSS
-      </span>
-      ,{' '}
-      <span className="bg-[linear-gradient(135deg,#4B32C3,69%,hsl(var(--background)))] bg-clip-text text-transparent">
-        ESLint
-      </span>{' '}
-      and{' '}
-      <span className="bg-[linear-gradient(135deg,#F7B93E,69%,hsl(var(--background)))] bg-clip-text text-transparent">
-        Prettier
-      </span>
-    </Typography>
+  return (
+    <main className="container py-4">
+      <section className="grid grid-cols-3 gap-4 md:grid-cols-5">
+        {isLoading
+          ? Array.from({ length: 10 }).map((_, index) => (
+              <Card key={index}>
+                <Skeleton className="aspect-square w-full rounded-t-lg" />
+                <CardHeader>
+                  <CardTitle className="line-clamp-1">Loading...</CardTitle>
+                  <CardDescription className="line-clamp-2">Loading...</CardDescription>
+                </CardHeader>
+              </Card>
+            ))
+          : data?.map((manga) => (
+              <Link key={manga?.id} href={`/manga/${manga?.id}`}>
+                <Card key={manga?.id}>
+                  <Image
+                    src={manga?.coverArtUrl ?? '/logo.svg'}
+                    alt={manga?.attributes.title.en ?? 'cover'}
+                    width={200}
+                    height={300}
+                    className="aspect-square w-full rounded-t-lg object-cover"
+                  />
+                  <CardHeader>
+                    <CardTitle className="line-clamp-1">{manga?.attributes.title.en}</CardTitle>
+                    <CardDescription className="line-clamp-2">
+                      Last chapter: {manga?.attributes.lastChapter}
+                    </CardDescription>
+                  </CardHeader>
+                </Card>
+              </Link>
+            ))}
+      </section>
 
-    <Button variant="outline" className="my-4 gap-2" asChild>
-      <a
-        href="https://github.com/tiesen243/create-yuki-app"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        <Github /> Github
-      </a>
-    </Button>
-  </main>
-)
+      <Pagination searchParams={searchParams} />
+    </main>
+  )
+}
 
 export default Page
