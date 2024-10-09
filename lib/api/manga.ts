@@ -61,7 +61,7 @@ export const useMangas = ({
             params: { 'includes[]': 'manga' },
           })
 
-          const coverArtUrl = `/api/covers/${manga.id}/${coverArt.data.data.attributes.fileName}`
+          const coverArtUrl = `https://uploads.mangadex.org/covers/${manga.id}/${coverArt.data.data.attributes.fileName}`
 
           return { ...manga, coverArtUrl }
         }),

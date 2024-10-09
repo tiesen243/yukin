@@ -13,6 +13,8 @@ export const ChapterPage: React.FC<{ chapterId: string }> = ({ chapterId }) => {
       <Skeleton key={index} className="h-96 w-full" />
     ))
 
+  console.log(data)
+
   return data.chapter.data.map((img, index) => (
     <Image
       key={index}

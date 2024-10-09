@@ -51,7 +51,7 @@ export const MangaDetail: React.FC<{ id: string }> = ({ id }) => {
       </article>
 
       <Image
-        src={`/api/covers/${id}/${coverUrl}`}
+        src={`https://uploads.mangadex.org/covers/${id}/${coverUrl}`}
         alt={data.attributes.title.en || `Cover of ${id}`}
         width={200}
         height={300}

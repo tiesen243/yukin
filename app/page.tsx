@@ -20,7 +20,7 @@ const Page: NextPage<Props> = ({ searchParams = { page: 1 } }) => {
 
   return (
     <main className="container py-4">
-      <section className="grid grid-cols-3 gap-4 md:grid-cols-5">
+      <section className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-5">
         {isLoading
           ? Array.from({ length: 10 }).map((_, index) => (
               <Card key={index}>
